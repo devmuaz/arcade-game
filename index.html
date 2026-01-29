@@ -50,6 +50,11 @@
         flex-direction: column;
         justify-content: center;
       }
+      .canvas-container {
+        position: relative;
+        display: inline-block;
+        width: 100%;
+      }
       canvas {
         display: block;
         width: 100%;
@@ -86,6 +91,9 @@
         user-select: none;
         -webkit-user-select: none;
         pointer-events: none;
+        width: calc(100% - 32px);
+        max-width: calc(100% - 32px);
+        box-sizing: border-box;
       }
       .hud div {
         pointer-events: auto;
@@ -249,8 +257,9 @@
       #levelUpNotification {
         position: absolute;
         left: 50%;
-        top: 70px;
+        top: 60px;
         transform: translateX(-50%);
+        z-index: 101;
         background: linear-gradient(
           135deg,
           rgba(0, 200, 255, 0.95) 0%,
@@ -534,22 +543,22 @@
   </head>
   <body>
     <div id="wrap">
-      <canvas id="game" width="540" height="760"></canvas>
-
-      <div class="hud" id="leftHUD">
-        <div>النقاط: <span id="score">0</span></div>
-        <div>حياة: <span id="lives">3</span></div>
-        <div>المستوى: <span id="level">1</span></div>
-        <div>أعلى نتيجة: <span id="best">0</span></div>
-        <div>وضع اللعب: <span id="modeTxt">لاعب واحد</span></div>
+      <div class="canvas-container">
+        <canvas id="game" width="540" height="760"></canvas>
+        <div class="hud" id="leftHUD">
+          <div>النقاط: <span id="score">0</span></div>
+          <div>حياة: <span id="lives">3</span></div>
+          <div>المستوى: <span id="level">1</span></div>
+          <div>أعلى نتيجة: <span id="best">0</span></div>
+          <div>وضع اللعب: <span id="modeTxt">لاعب واحد</span></div>
+        </div>
+        <div id="pause" title="إيقاف/استئناف">⏸️</div>
       </div>
 
       <div class="right-hud" id="rightHUD" style="display: none">
         <div>أعلى نتيجة: <span id="best">0</span></div>
         <div>وضع اللعب: <span id="modeTxt">لاعب واحد</span></div>
       </div>
-
-      <div id="pause" title="إيقاف/استئناف">⏸️</div>
 
       <div id="overlay" class="overlay">
         <h2 id="title">لعبة الطائرات — متكاملة</h2>
