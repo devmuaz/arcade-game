@@ -94,6 +94,7 @@
         width: calc(100% - 32px);
         max-width: calc(100% - 32px);
         box-sizing: border-box;
+        direction: rtl;
       }
       .hud div {
         pointer-events: auto;
@@ -103,6 +104,8 @@
         align-items: center;
         gap: 6px;
         white-space: nowrap;
+        direction: rtl;
+        text-align: right;
       }
       .hud span {
         font-weight: 700;
@@ -192,6 +195,10 @@
         bottom: 18px;
         display: flex;
         gap: 12px;
+        touch-action: none;
+        -webkit-touch-callout: none;
+        user-select: none;
+        -webkit-user-select: none;
       }
       .tc-btn {
         width: 56px;
@@ -715,6 +722,48 @@
         return false;
       });
 
+      // Prevent double-tap zoom on touch control buttons
+      function preventDoubleTapZoom(element) {
+        if (!element) return;
+        let lastTouchEnd = 0;
+
+        element.addEventListener(
+          "touchend",
+          (e) => {
+            const now = Date.now();
+            if (now - lastTouchEnd < 300) {
+              e.preventDefault();
+              e.stopPropagation();
+              return false;
+            }
+            lastTouchEnd = now;
+          },
+          { passive: false },
+        );
+
+        element.addEventListener(
+          "touchstart",
+          (e) => {
+            e.stopPropagation();
+          },
+          { passive: true },
+        );
+
+        element.addEventListener(
+          "touchmove",
+          (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          },
+          { passive: false },
+        );
+
+        element.addEventListener("contextmenu", (e) => {
+          e.preventDefault();
+          return false;
+        });
+      }
+
       const scoreEl = document.getElementById("score");
       const livesEl = document.getElementById("lives");
       const levelEl = document.getElementById("level");
@@ -736,6 +785,14 @@
       const rightBtn = document.getElementById("rightBtn");
       const fireBtn = document.getElementById("fireBtn");
       const stats = document.getElementById("stats");
+
+      // Apply double-tap zoom prevention to touch control buttons
+      const touchControlButtons = [leftBtn, rightBtn, fireBtn, touchControls];
+      touchControlButtons.forEach((btn) => {
+        if (btn) {
+          preventDoubleTapZoom(btn);
+        }
+      });
 
       let keys = {},
         touch = { left: false, right: false, fire: false };
